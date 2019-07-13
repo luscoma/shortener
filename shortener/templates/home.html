@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <title>Shortener: Simple URL Shortening</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      .mdl-layout-title > a {
+        text-decoration: none;
+        color: inherit
+      }
+    </style>
+  </head>
+  <body>
+   <div class="mdl-layout mdl-js-layout mdl-layout--no-drawer-button">
+     <header class="mdl-layout__header">
+       <div class="mdl-layout__header-row">
+         <span class="mdl-layout-title"><a href="/">Shortener</a></span>
+       </div>
+     </header>
+     <main class="mdl-layout__content">
+       <div class="mdl-grid">
+         <div class="mdl-cell mdl-cell--12-col">
+           <h4>Lookup/update a value</h4>
+           <form action="/admin">
+             <div class="mdl-textfield mdl-js-textfield">
+               <input class="mdl-textfield__input" type="text" id="path" name="path">
+               <label class="mdl-textfield__label" for="path">Path...</label>
+             </div>
+             <input type="submit" value="Lookup" class="mdl-button mdl-js-button"/>
+           </form>
+        </div>
+    
+        <div class="mdl-cell mdl-cell--12-col">
+         {% if not existing_redirects %}
+            <div>No existing redirects found :(</div>
+         {% else %}
+         <h4>Existing Redirects</h4>
+         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+           <thead>
+             <tr>
+               <th class="mdl-data-table__cell--non-numeric">Path</th>
+               <th class="mdl-data-table__cell--non-numeric">Redirecting To</th>
+             </tr>
+           </thead>
+           <tbody>
+           {% for path, value in existing_redirects %}
+             <tr>
+               <td class="mdl-data-table__cell--non-numeric">
+                 <a href="/admin/{{path}}">/{{path}}</a>
+               </td>
+               <td class="mdl-data-table__cell--non-numeric">
+                 <a href="{{value}}">{{value}}</a>
+               </td>
+             </tr>
+           {% endfor %}
+           </tbody>
+           <tfoot>
+             <tr>
+               <td colspan="2">
+                 <form action="/" method="GET" style="margin:0">
+                   <div style="display:flex; align-items: center; justify-content: space-between">
+     		     <div style="color:rgba(0,0,0,.54)">Rows per page: <span>{{rows_per_page}}</span></div>
+		     <div>
+                         {% if cursor %}
+                         <a class="mdl-button mdl-js-button mdl-button--icon" href="/?start={{cursor}}&count={{rows_per_page}}">
+                           <i class="material-icons">chevron_right</i>
+                         </a>
+                         {% else %}
+                         <button class="mdl-button mdl-js-button mdl-button--icon" disabled>
+                           <i class="material-icons">chevron_right</i>
+                         </button>
+                         {% endif %}
+                     </div>
+                   </div>
+                 </form>
+               </td>
+             </tr>
+           </tfoot>
+         </table>
+        </div>
+        {% endif %}
+      </div>
+    </main>
+    <footer class="mdl-mini-footer" style="padding:16px">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Shortener</div>
+        <ul class="mdl-mini-footer__link-list">
+          <li>{{visits}} views</li>
+        </ul>
+      </div>
+      <div class="mdl-mini-footer__right-section">
+        <ul class="mdl-mini-footer__link-list">
+          <li>Served by {{hostname}}</li>
+        </ul>
+    </footer>
+   </div>
+  </body>
+</html>

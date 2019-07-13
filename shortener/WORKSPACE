@@ -1,0 +1,31 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+git_repository(
+    name = "io_bazel_rules_python",
+    remote = "https://github.com/bazelbuild/rules_python.git",
+    branch = "master"
+)
+
+# Only needed for PIP support:
+load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories")
+pip_repositories()
+
+load(
+  "@io_bazel_rules_python//python:pip.bzl",
+  "pip_import"
+)
+
+pip_import(
+  name = "requirements",
+  requirements = "//:requirements.txt"
+)
+
+pip_import(
+  name = "test_requirements",
+  requirements = "//:test_requirements.txt"
+)
+
+load("@requirements//:requirements.bzl", "pip_install")
+pip_install()
+
+load("@test_requirements//:requirements.bzl", pip_install_test_deps="pip_install")
+pip_install_test_deps()

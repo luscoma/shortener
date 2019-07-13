@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Shortener: Simple URL Shortening</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      .mdl-layout-title > a {
+        text-decoration: none;
+        color: inherit
+      }
+    </style>
+  </head>
+  <body>
+   <div class="mdl-layout mdl-js-layout mdl-layout--no-drawer-button">
+     <header class="mdl-layout__header">
+       <div class="mdl-layout__header-row">
+         <span class="mdl-layout-title"><a href="/">Shortener</a></span>
+       </div>
+     </header>
+     <main class="mdl-layout__content">
+       <div class="mdl-grid">
+         <div class="mdl-cell mdl-cell--12-col">
+           {% if redirect_to %}
+           <div>/{{path}} currently redirects to <a href="{{redirect_to}}">{{redirect_to}}</a></div>
+           {% endif %}
+           <div>{%if redirect_to %}Change{%else%}Set{%endif%} the redirect location for /{{path}}</div>
+           <form method="POST">
+             <div class="mdl-textfield mdl-js-textfield">
+               <input class="mdl-textfield__input" type="text" id="redirect_to" name="redirect_to" value="{%if redirect_to %}{{redirect_to}}{% endif %}">
+               <label class="mdl-textfield__label" for="redirect_to">Destination...</label>
+             </div>
+             <input type="submit" name="action" value="Update" class="mdl-button mdl-js-button"/>
+           </form>
+           {% if redirect_to %}
+           <form method="POST">
+             <label for="action">Delete the redirect for /{{path}} to {{redirect_to}}</label>
+             <input type="submit" name="action" value="Delete" class="mdl-button mdl-js-button"/>
+           </form>
+           {% endif %}
+        </div>
+      </div>
+    </main>
+    <footer class="mdl-mini-footer" style="padding:16px">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Shortener</div>
+      </div>
+      <div class="mdl-mini-footer__right-section">
+        <ul class="mdl-mini-footer__link-list">
+          <li>Served by {{hostname}}</li>
+        </ul>
+    </footer>
+   </div>
+  </body>
+</html>
