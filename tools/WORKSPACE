@@ -1,0 +1,6 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+git_repository(
+    name = "io_google_jsonnet",
+    remote = "https://github.com/google/jsonnet.git",
+    tag = "v0.13.0"
+)
