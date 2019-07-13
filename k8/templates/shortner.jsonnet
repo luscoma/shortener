@@ -19,9 +19,5 @@ local kube = import '../lib/kube.libsonnet';
 
   service: kube.Service('shortner-web') {
     target_pod: $.deployment.spec.template,
-    spec+: {
-      type: 'LoadBalancer',
-      loadBalancerIP: 'localhost',
-    },
   },
 }
