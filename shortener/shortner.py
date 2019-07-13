@@ -31,8 +31,7 @@ def validate_path(path):
 
 @flask_app.route("/")
 def home():
-    visits = data.increment_visits(flask_app.db)
-
+    visits = data.get_visits(flask_app.db)
     start = flask.request.args.get('start')
     count = flask.request.args.get('count', default=50, type=int)
     cursor, existing_redirects = data.list_redirects(flask_app.db, cursor=start, count=count)
@@ -48,12 +47,12 @@ def home():
 def view_path(path=None):
     path = path or flask.request.args.get('path')
     validate_path(path)
-    redirection = data.get_redirect(flask_app.db, path) if path else None
+    redirection, visits  = data.get_redirect(flask_app.db, path) if path else None
     return flask.render_template('admin.html', 
        path=path,
        redirect_to=redirection,
        hostname=socket.gethostname(),
-       views=views)
+       visits=visits)
 
 @flask_app.route("/admin", methods=["POST"])
 @flask_app.route("/admin/<path>", methods=["POST"])
@@ -78,8 +77,9 @@ def update_path(path=None):
 @flask_app.route("/<path>/*")
 def redirect_path(path):
     validate_path(path)
-    redirection = data.get_redirect(flask_app.db, path)
+    redirection, _ = data.get_redirect(flask_app.db, path)
     if redirection:
+      data.increment_visits(flask_app.db, path=path)
       return flask.redirect(redirection, code=302)
     return flask.redirect('/admin/' + path, code=302)
 

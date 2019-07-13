@@ -43,10 +43,11 @@
              <tr>
                <th class="mdl-data-table__cell--non-numeric">Path</th>
                <th class="mdl-data-table__cell--non-numeric">Redirecting To</th>
+               <th class="mdl-data-table__cell--non-numeric">Redirects</th>
              </tr>
            </thead>
            <tbody>
-           {% for path, value in existing_redirects %}
+           {% for path, (value, visits) in existing_redirects %}
              <tr>
                <td class="mdl-data-table__cell--non-numeric">
                  <a href="/admin/{{path}}">/{{path}}</a>
@@ -54,12 +55,13 @@
                <td class="mdl-data-table__cell--non-numeric">
                  <a href="{{value}}">{{value}}</a>
                </td>
+               <td>{{visits}}</td>
              </tr>
            {% endfor %}
            </tbody>
            <tfoot>
              <tr>
-               <td colspan="2">
+               <td colspan="3">
                  <form action="/" method="GET" style="margin:0">
                    <div style="display:flex; align-items: center; justify-content: space-between">
      		     <div style="color:rgba(0,0,0,.54)">Rows per page: <span>{{rows_per_page}}</span></div>
@@ -88,7 +90,7 @@
       <div class="mdl-mini-footer__left-section">
         <div class="mdl-logo">Shortener</div>
         <ul class="mdl-mini-footer__link-list">
-          <li>{{visits}} views</li>
+          <li>{{visits}} redirects performed</li>
         </ul>
       </div>
       <div class="mdl-mini-footer__right-section">
